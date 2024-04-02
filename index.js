@@ -15,9 +15,20 @@ import {
 export function selectGame(gameDescription) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(gameDescription, "black");
-  const boardSize = Number(gameDescription.charAt(5));
-  const shipPositions = gameDescription.substring(10).replace("}", "");
-  console.log(`boardSize: ${boardSize}, shipPositions: ${shipPositions}`);
+
+  // debugger;
+  const parts = gameDescription.replace(/{|}/g, "").split(/,s:|,/);
+  const shipPositions = {};
+  const boardSize = Number(parts.shift().charAt(5));
+  parts.forEach((part) => {
+    let [key, value] = part.split(":");
+    key = key.trim();
+    value = value.trim();
+    shipPositions[key] = value;
+  });
+
+  console.log(`Size of the board: ${boardSize}`);
+  console.table(shipPositions);
 }
 
 /**
