@@ -1,3 +1,5 @@
+https://docs.google.com/spreadsheets/d/1BfYHqH-HjSE17uPVqxghFzzhcTCEKsgzaCnFI62gY2g/edit?usp=sharing
+
 ### Once You download:
 
 At the terminal, run:
