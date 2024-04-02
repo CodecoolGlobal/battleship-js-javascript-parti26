@@ -17,7 +17,7 @@ export function selectGame(gameDescription) {
   displayMessage(gameDescription, "black");
 
   // debugger;
-  const parts = gameDescription.replace(/{|}/g, "").split(/,s:|,/);
+  const parts = gameDescription.replace(/{|}/g, "").split(/s:|,/g);
   const shipPositions = {};
   const boardSize = Number(parts.shift().charAt(5));
   parts.forEach((part) => {
