@@ -1,5 +1,8 @@
-import {displayBoard, displayMessage, displayTextMessage}
-  from './event-handlers.js';
+import {
+  displayBoard,
+  displayMessage,
+  displayTextMessage,
+} from "./event-handlers.js";
 
 /**
  * This function is called when you choose the game mode.
@@ -10,7 +13,7 @@ import {displayBoard, displayMessage, displayTextMessage}
  */
 export function selectGame(gameDescription) {
   // You may delete the following line as an example to see what the data looks like.
-  displayMessage(gameDescription, 'black');
+  displayMessage(gameDescription, "black");
 }
 
 /**
@@ -21,8 +24,12 @@ export function selectGame(gameDescription) {
  */
 export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
-  displayMessage(clickProperties.x + clickProperties.y +
-                 clickProperties.clickType + clickProperties.source);
+  displayMessage(
+    clickProperties.x +
+      clickProperties.y +
+      clickProperties.clickType +
+      clickProperties.source
+  );
 }
 
 /**
@@ -34,7 +41,7 @@ export function resetGame() {
   for (let i = 0; i < 10; i++) {
     board.push([]);
     for (let j = 0; j < 10; j++) {
-      board[i].push('');
+      board[i].push("");
     }
   }
   displayBoard({ boardNumber: 1, board: board });
@@ -53,7 +60,6 @@ export function aiShoot(coordinates) {
   displayMessage(coordinates.x + coordinates.y);
 }
 
-
 /*
 Example to show how the three callable function looks in action.
 The `displayBoard` function requires an object as an argument,
@@ -64,11 +70,23 @@ and `board`, which should be a nested array to display.
 They require two arguments: first is a string to display,
 and the second is a color (can be text, RGB, RGBA, or hex color).
 */
-displayBoard({ boardNumber: 1, board:
-  [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
+displayBoard({
+  boardNumber: 1,
+  board: [
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""],
+  ],
 });
-displayBoard({ boardNumber: 2, board:
-  [['', '', '', ''], ['', '', '', ''], ['', '', '', ''], ['', '', '', '']],
+displayBoard({
+  boardNumber: 2,
+  board: [
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""],
+    ["", "", "", ""],
+  ],
 });
-displayMessage('message', 'green');
-displayTextMessage('text message', 'red');
+displayMessage("message", "green");
+displayTextMessage("text message", "red");
