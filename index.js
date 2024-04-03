@@ -45,10 +45,9 @@ export function selectGame(gameDescription) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(gameDescription, "black");
 
-  // debugger;
-  const parts = gameDescription.replace(/{|}/g, "").split(/,s:|,/);
   const shipPositions = {};
-  const boardSize = Number(parts.shift().charAt(5));
+  const parts = gameDescription.replace(/{|}/g, "").split(/,s:|,/);
+  GAME_STATE.boardSize = Number(parts.shift().charAt(5));
   parts.forEach((part) => {
     let [key, value] = part.split(":");
     key = key.trim();
@@ -56,7 +55,7 @@ export function selectGame(gameDescription) {
     shipPositions[key] = value;
   });
 
-  console.log(`Size of the board: ${boardSize}`);
+  console.log(`Size of the board: ${GAME_STATE.boardSize}`);
   console.table(shipPositions);
 }
 
