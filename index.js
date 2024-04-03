@@ -67,21 +67,8 @@ export function selectGame(gameDescription) {
  */
 export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
-  displayMessage(
-    clickProperties.x +
-      clickProperties.y +
-      clickProperties.clickType +
-      clickProperties.source
-  );
-  const x = clickProperties.x.codePointAt(0) - "A".codePointAt(0);
-  const y = clickProperties.y - 1;
-  const Board = clickProperties.source - 1;
-
-  if (GAME_STATE.shootingPhase) {
-    if (false) {
-      GAME_STATE.currentBoard[Board].board[x][y] = "X";
-    } else {
-      GAME_STATE.currentBoard[Board].board[x][y] = "m";
+  //Use destructing to access object properties, improve code readability
+  const { x, y, source } = clickProperties;
     }
   }
 
