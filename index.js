@@ -4,6 +4,31 @@ import {
   displayTextMessage,
 } from "./event-handlers.js";
 
+let GAME_STATE = {
+  currentBoard: [
+    {
+      boardNumber: 1,
+      board: [
+        ["", "", "", ""],
+        ["", "", "m", ""],
+        ["", "", "", ""],
+        ["", "", "", ""],
+      ],
+    },
+    {
+      boardNumber: 2,
+      board: [
+        ["", "", "", ""],
+        ["", "", "", ""],
+        ["", "", "", ""],
+        ["", "", "", ""],
+      ],
+    },
+  ],
+  shootingPhase: false,
+  placementPhase: false,
+};
+
 /**
  * This function is called when you choose the game mode.
  * The caller gives you the data about what kind of game
@@ -30,6 +55,20 @@ export function handleClick(clickProperties) {
       clickProperties.clickType +
       clickProperties.source
   );
+  const x = clickProperties.x.codePointAt(0) - "A".codePointAt(0);
+  const y = clickProperties.y - 1;
+  const Board = clickProperties.source - 1;
+
+  if (GAME_STATE.shootingPhase) {
+    if (false) {
+      GAME_STATE.currentBoard[Board].board[x][y] = "X";
+    } else {
+      GAME_STATE.currentBoard[Board].board[x][y] = "m";
+    }
+  }
+
+  displayBoard(GAME_STATE.currentBoard[0]);
+  displayBoard(GAME_STATE.currentBoard[1]);
 }
 
 /**
@@ -88,5 +127,8 @@ displayBoard({
     ["", "", "", ""],
   ],
 });
+
+displayBoard(GAME_STATE.currentBoard[0]);
+displayBoard(GAME_STATE.currentBoard[1]);
 displayMessage("message", "green");
 displayTextMessage("text message", "red");
