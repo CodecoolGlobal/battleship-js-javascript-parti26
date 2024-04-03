@@ -10,7 +10,7 @@ let GAME_STATE = {
       boardNumber: 1,
       board: [
         ["", "", "", ""],
-        ["", "", "m", ""],
+        ["", "", "", ""],
         ["", "", "", ""],
         ["", "", "", ""],
       ],
@@ -27,7 +27,10 @@ let GAME_STATE = {
   ],
   shootingPhase: false,
   placementPhase: false,
+  turn: "You",
 };
+
+const shipPositions = {};
 
 /**
  * This function is called when you choose the game mode.
@@ -43,7 +46,6 @@ export function selectGame(gameDescription) {
 
   // debugger;
   const parts = gameDescription.replace(/{|}/g, "").split(/,s:|,/);
-  const shipPositions = {};
   const boardSize = Number(parts.shift().charAt(5));
   parts.forEach((part) => {
     let [key, value] = part.split(":");
@@ -72,13 +74,23 @@ export function handleClick(clickProperties) {
   );
   const x = clickProperties.x.codePointAt(0) - "A".codePointAt(0);
   const y = clickProperties.y - 1;
-  const Board = clickProperties.source - 1;
+  const board = clickProperties.source - 1;
+  const shoot = clickProperties.x.toLowerCase() + clickProperties.y;
 
-  if (GAME_STATE.shootingPhase) {
-    if (false) {
-      GAME_STATE.currentBoard[Board].board[x][y] = "X";
+  if (GAME_STATE.shootingPhase && board === 1 && GAME_STATE.turn === "You") {
+    let hit = false;
+    for (const shipPosition of Object.values(shipPositions)) {
+      if (shipPosition === shoot) {
+        hit = true;
+      }
+    }
+    if (hit) {
+      GAME_STATE.currentBoard[board].board[x][y] = "X";
+      displayTextMessage("hit Your turn again", "red");
     } else {
-      GAME_STATE.currentBoard[Board].board[x][y] = "m";
+      GAME_STATE.currentBoard[board].board[x][y] = "m";
+      displayTextMessage("missed, AI's turn", "red");
+      GAME_STATE.turn = "AI";
     }
   }
 
