@@ -151,6 +151,7 @@ and `board`, which should be a nested array to display.
 They require two arguments: first is a string to display,
 and the second is a color (can be text, RGB, RGBA, or hex color).
 */
+
 displayBoard({
   boardNumber: 1,
   board: [
@@ -170,7 +171,5 @@ displayBoard({
   ],
 });
 
-displayBoard(GAME_STATE.currentBoard[0]);
-displayBoard(GAME_STATE.currentBoard[1]);
 displayMessage("message", "green");
 displayTextMessage("text message", "red");
