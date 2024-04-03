@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import {
   displayBoard,
   displayMessage,
@@ -5,12 +6,13 @@ import {
 } from "./event-handlers.js";
 
 let GAME_STATE = {
+  boardSize: 0,
   currentBoard: [
     {
       boardNumber: 1,
       board: [
         ["", "", "", ""],
-        ["", "", "m", ""],
+        ["", "", "", ""],
         ["", "", "", ""],
         ["", "", "", ""],
       ],
@@ -25,6 +27,8 @@ let GAME_STATE = {
       ],
     },
   ],
+  userShipPositions: [],
+  numOfShips: 2, //---> for now it is burnt in, depends on game mode (AI ships number)
   shootingPhase: false,
   placementPhase: false,
 };
