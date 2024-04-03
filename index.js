@@ -25,7 +25,7 @@ let GAME_STATE = {
       ],
     },
   ],
-  shootingPhase: true,
+  shootingPhase: false,
   placementPhase: false,
   turn: "You",
 };
