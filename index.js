@@ -69,11 +69,16 @@ export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
   //Use destructing to access object properties, improve code readability
   const { x, y, source } = clickProperties;
-    }
-  }
 
-  displayBoard(GAME_STATE.currentBoard[0]);
-  displayBoard(GAME_STATE.currentBoard[1]);
+  const xCord = x.codePointAt(0) - "A".codePointAt(0);
+  const yCord = y - 1;
+  const board = source - 1;
+
+  //### Force to placementphase -delete
+  GAME_STATE.placementPhase = true;
+  GAME_STATE.shootingPhase = false;
+  //###
+
 }
 
 /**
