@@ -79,6 +79,38 @@ export function handleClick(clickProperties) {
   GAME_STATE.shootingPhase = false;
   //###
 
+  //source values: 1 (user grid), 2 (AI grid)
+  switch (source) {
+    case 1: //--> click source is form USER grid
+      // Placement phase
+      if (GAME_STATE.placementPhase && !GAME_STATE.shootingPhase) {
+        //Save coordinates of the placed ship
+        //Can not use numOfShips without GAME_STATE
+        if (GAME_STATE.numOfShips > 0) {
+          GAME_STATE.userShipPositions.push(x + y);
+          displayMessage(x + source + y);
+          GAME_STATE.numOfShips--;
+          console.log(GAME_STATE.numOfShips);
+          displayTextMessage(
+            `You have ${GAME_STATE.numOfShips} ships to place.`
+          );
+          //Put ship on the table
+          GAME_STATE.currentBoard[board].board[xCord][yCord] = "O";
+          displayBoard(GAME_STATE.currentBoard[board]);
+        }
+      }
+      break;
+    case 2: //--> click source is form AI grid
+      if (!GAME_STATE.placementPhase && GAME_STATE.shootingPhase) {
+        displayTextMessage("Shoot on AI board.");
+        displayMessage(x + y);
+        GAME_STATE.currentBoard[board].board[xCord][yCord] = "m";
+        displayBoard(GAME_STATE.currentBoard[board]);
+      }
+      break;
+    default:
+      return null;
+  }
 }
 
 /**
