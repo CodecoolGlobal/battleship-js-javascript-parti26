@@ -11,9 +11,24 @@ import {
  * @param {String} gameDescription - An encoded string of the game data.
  *    You have to parse to use it.
  */
+
 export function selectGame(gameDescription) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(gameDescription, "black");
+
+  // debugger;
+  const parts = gameDescription.replace(/{|}/g, "").split(/,s:|,/);
+  const shipPositions = {};
+  const boardSize = Number(parts.shift().charAt(5));
+  parts.forEach((part) => {
+    let [key, value] = part.split(":");
+    key = key.trim();
+    value = value.trim();
+    shipPositions[key] = value;
+  });
+
+  console.log(`Size of the board: ${boardSize}`);
+  console.table(shipPositions);
 }
 
 /**
