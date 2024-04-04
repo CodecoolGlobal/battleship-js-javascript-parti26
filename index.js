@@ -30,7 +30,7 @@ let GAME_STATE = {
   userShipPositions: [],
   numOfShips: 2, //---> for now it is burnt in, depends on game mode (AI ships number)
   shootingPhase: false,
-  placementPhase: true,
+  placementPhase: false,
   turn: "You",
 };
 
