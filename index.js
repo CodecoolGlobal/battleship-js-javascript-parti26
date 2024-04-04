@@ -86,7 +86,7 @@ export function handleClick(clickProperties) {
     }
     if (hit) {
       GAME_STATE.currentBoard[board].board[x][y] = "X";
-      displayTextMessage("hit Your turn again", "red");
+      displayTextMessage("hit, your turn again", "red");
     } else {
       GAME_STATE.currentBoard[board].board[x][y] = "m";
       displayTextMessage("missed, AI's turn", "red");
