@@ -1,4 +1,6 @@
-https://docs.google.com/spreadsheets/d/1BfYHqH-HjSE17uPVqxghFzzhcTCEKsgzaCnFI62gY2g/edit?usp=sharing
+Ticket sheet: [link](https://docs.google.com/spreadsheets/d/1BfYHqH-HjSE17uPVqxghFzzhcTCEKsgzaCnFI62gY2g/edit?usp=sharing)
+
+Slide: [link](https://docs.google.com/presentation/d/1CKJSHRFsGpoC611gNPgwozseb1fwqZvfvVZV0GKq87M/edit?usp=sharing)
 
 ### Once You download:
 
