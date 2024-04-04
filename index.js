@@ -48,7 +48,7 @@ export function selectGame(gameDescription) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(gameDescription, "black");
 
-  // debugger;
+  const shipPositions = {};
   const parts = gameDescription.replace(/{|}/g, "").split(/,s:|,/);
   GAME_STATE.boardSize = Number(parts.shift().charAt(5));
   parts.forEach((part) => {
