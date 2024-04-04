@@ -47,10 +47,10 @@ let GAME_STATE = {
   ],
   userShipPositions: [],
   AIshipPositions: {},
-  numOfShips: 2, //---> for now it is burnt in, depends on game mode (AI ships number)
+  numOfShips: 2,
   numOfShipsConst: 2,
   shootingPhase: false,
-  placementPhase: true,
+  placementPhase: false,
   turn: "user",
 };
 
@@ -66,7 +66,6 @@ export function selectGame(gameDescription) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(gameDescription, "black");
 
-  const shipPositions = {};
   const parts = gameDescription.replace(/{|}/g, "").split(/,s:|,/);
   GAME_STATE.boardSize = Number(parts.shift().charAt(5));
   parts.forEach((part) => {
@@ -75,6 +74,7 @@ export function selectGame(gameDescription) {
     value = value.trim();
     GAME_STATE.AIshipPositions[key] = value;
   });
+  GAME_STATE.placementPhase = true;
 
   console.log(`Size of the board: ${GAME_STATE.boardSize}`);
   console.table(GAME_STATE.AIshipPositions);
@@ -122,6 +122,7 @@ export function handleClick(clickProperties) {
       }
       break;
     case 2: //--> click source is form AI grid
+      // Shooting phase
       if (GAME_STATE.shootingPhase && GAME_STATE.turn === "user") {
         let hit = false;
         for (const shipPosition of Object.values(GAME_STATE.AIshipPositions)) {
@@ -135,6 +136,7 @@ export function handleClick(clickProperties) {
           if (GAME_STATE.numOfShipsConst === GAME_STATE.currentBoard[board].count("X")) {
             displayTextMessage("hit, You won. CONGRATULATION", "red");
             GAME_STATE.shootingPhase = false;
+            displayMessage("Push Restart or choose a game mode.");
           } else {
             displayTextMessage("hit, Your turn again", "red");
           }
@@ -147,7 +149,7 @@ export function handleClick(clickProperties) {
       }
       break;
     default:
-      return null;
+      break;
   }
 }
 
@@ -178,14 +180,16 @@ export function resetGame() {
       },
     ],
     userShipPositions: [],
-    numOfShips: 2, //---> for now it is burnt in, depends on game mode (AI ships number)
+    AIshipPositions: {},
+    numOfShips: 2,
+    numOfShipsConst: 2,
     shootingPhase: false,
-    placementPhase: true,
-    turn: "You",
-  };
+    placementPhase: false,
+    turn: "user",
+    };
   displayBoard(GAME_STATE.currentBoard[0]);
   displayBoard(GAME_STATE.currentBoard[1]);
-  displayTextMessage("Select new game mode")
+  displayTextMessage("Select new game mode");
 }
 
 /**
@@ -210,6 +214,7 @@ export function aiShoot(coordinates) {
       if (GAME_STATE.currentBoard[0].count("X") === GAME_STATE.numOfShipsConst) {
         displayTextMessage("You lost, try again!", "red");
         GAME_STATE.shootingPhase = false;
+        displayMessage("Push Restart or choose a game mode.");
       } else {
       displayTextMessage("hit AI's turn again", "red");
       }
@@ -255,5 +260,4 @@ displayBoard({
   ],
 });
 
-displayMessage("message", "green");
-displayTextMessage("text message", "red");
+displayMessage("Select game mode", "green");
