@@ -102,14 +102,10 @@ export function handleClick(clickProperties) {
       // Placement phase
       if (GAME_STATE.placementPhase && !GAME_STATE.shootingPhase) {
         //Save coordinates of the placed ship
-        //Can not use numOfShips without GAME_STATE
         if (GAME_STATE.numOfShips > 0) {
           GAME_STATE.userShipPositions.push(x + y);
-          displayMessage(x + source + y);
           GAME_STATE.numOfShips--;
-          displayTextMessage(
-            `You've left ${GAME_STATE.numOfShips} ships to place.`
-          );
+          displayTextMessage( `You've left ${GAME_STATE.numOfShips} ships to place.`, "red" );
           //Put ship on the table
           GAME_STATE.currentBoard[board].board[xCord][yCord] = "O";
           displayBoard(GAME_STATE.currentBoard[board]);
@@ -117,7 +113,7 @@ export function handleClick(clickProperties) {
         if (GAME_STATE.numOfShips === 0) {
           GAME_STATE.placementPhase = false;
           GAME_STATE.shootingPhase = true;
-          displayTextMessage("Shooting phase started. It's your turn.");
+          displayTextMessage("Shooting phase started. It's your turn.", "green");
         }
       }
       break;
@@ -136,7 +132,7 @@ export function handleClick(clickProperties) {
           if (GAME_STATE.numOfShipsConst === GAME_STATE.currentBoard[board].count("X")) {
             displayTextMessage("hit, You won. CONGRATULATION", "red");
             GAME_STATE.shootingPhase = false;
-            displayMessage("Push Restart or choose a game mode.");
+            displayMessage("Push Restart or choose a game mode.", "blue");
           } else {
             displayTextMessage("hit, Your turn again", "red");
           }
@@ -189,7 +185,8 @@ export function resetGame() {
     };
   displayBoard(GAME_STATE.currentBoard[0]);
   displayBoard(GAME_STATE.currentBoard[1]);
-  displayTextMessage("Select new game mode");
+  displayTextMessage("Select new game mode", "blue");
+  displayMessage("");
 }
 
 /**
@@ -200,8 +197,7 @@ export function resetGame() {
  *    where the AI would like to shoot.
  */
 export function aiShoot(coordinates) {
-  // You may delete the following line as an example to see what the data looks like.
-  displayMessage(coordinates.x + coordinates.y);
+  displayMessage(coordinates.x + coordinates.y, "green");
 
   const x = coordinates.x.codePointAt(0) - "A".codePointAt(0);
   const y = coordinates.y - 1;
@@ -214,7 +210,7 @@ export function aiShoot(coordinates) {
       if (GAME_STATE.currentBoard[0].count("X") === GAME_STATE.numOfShipsConst) {
         displayTextMessage("You lost, try again!", "red");
         GAME_STATE.shootingPhase = false;
-        displayMessage("Push Restart or choose a game mode.");
+        displayMessage("Push Restart or choose a game mode.", "blue");
       } else {
       displayTextMessage("hit AI's turn again", "red");
       }
@@ -230,34 +226,6 @@ export function aiShoot(coordinates) {
   displayBoard(GAME_STATE.currentBoard[0]);
 }
 
-/*
-Example to show how the three callable function looks in action.
-The `displayBoard` function requires an object as an argument,
-and it should have two properties:
-`boardNumber` with 1 (left) or 2 (right) to decide where you would like to display,
-and `board`, which should be a nested array to display.
-`displayMessage` and `displayTextMessage` are functions to display messages:
-They require two arguments: first is a string to display,
-and the second is a color (can be text, RGB, RGBA, or hex color).
-*/
-
-displayBoard({
-  boardNumber: 1,
-  board: [
-    ["", "", "", ""],
-    ["", "", "", ""],
-    ["", "", "", ""],
-    ["", "", "", ""],
-  ],
-});
-displayBoard({
-  boardNumber: 2,
-  board: [
-    ["", "", "", ""],
-    ["", "", "", ""],
-    ["", "", "", ""],
-    ["", "", "", ""],
-  ],
-});
-
+displayBoard(GAME_STATE.currentBoard[0]);
+displayBoard(GAME_STATE.currentBoard[1]);
 displayMessage("Select game mode", "green");
