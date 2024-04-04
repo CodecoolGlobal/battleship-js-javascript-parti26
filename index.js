@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import {
   displayBoard,
   displayMessage,
@@ -5,6 +6,7 @@ import {
 } from "./event-handlers.js";
 
 let GAME_STATE = {
+  boardSize: 0,
   currentBoard: [
     {
       boardNumber: 1,
@@ -25,6 +27,8 @@ let GAME_STATE = {
       ],
     },
   ],
+  userShipPositions: [],
+  numOfShips: 2, //---> for now it is burnt in, depends on game mode (AI ships number)
   shootingPhase: false,
   placementPhase: false,
   turn: "You",
@@ -54,7 +58,7 @@ export function selectGame(gameDescription) {
     shipPositions[key] = value;
   });
 
-  console.log(`Size of the board: ${boardSize}`);
+  console.log(`Size of the board: ${GAME_STATE.boardSize}`);
   console.table(shipPositions);
 }
 
@@ -66,20 +70,51 @@ export function selectGame(gameDescription) {
  */
 export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
-  displayMessage(
-    clickProperties.x +
-      clickProperties.y +
-      clickProperties.clickType +
-      clickProperties.source
-  );
-  const x = clickProperties.x.codePointAt(0) - "A".codePointAt(0);
-  const y = clickProperties.y - 1;
-  const board = clickProperties.source - 1;
-  const shoot = clickProperties.x.toLowerCase() + clickProperties.y;
-
-  if (GAME_STATE.shootingPhase && board === 1 && GAME_STATE.turn === "You") {
-    let hit = false;
-    for (const shipPosition of Object.values(shipPositions)) {
+  //Use destructuring assignment to access object properties, improve code readability
+  const { x, y, source } = clickProperties;
+  
+  const xCord = x.codePointAt(0) - "A".codePointAt(0);
+  const yCord = y - 1;
+  const board = source - 1;
+  
+  //source values: 1 (user grid), 2 (AI grid)
+  switch (source) {
+    case 1: //--> click source is form USER grid
+      // Placement phase
+      if (GAME_STATE.placementPhase && !GAME_STATE.shootingPhase) {
+        //Save coordinates of the placed ship
+        //Can not use numOfShips without GAME_STATE
+        if (GAME_STATE.numOfShips > 0) {
+          GAME_STATE.userShipPositions.push(x + y);
+          displayMessage(x + source + y);
+          GAME_STATE.numOfShips--;
+          displayTextMessage(
+            `You've left ${GAME_STATE.numOfShips} ships to place.`
+          );
+          //Put ship on the table
+          GAME_STATE.currentBoard[board].board[xCord][yCord] = "O";
+          displayBoard(GAME_STATE.currentBoard[board]);
+        }
+        if (GAME_STATE.numOfShips === 0) {
+          GAME_STATE.placementPhase = false;
+          GAME_STATE.shootingPhase = true;
+        }
+      }
+      break;
+    case 2: //--> click source is form AI grid
+      if (!GAME_STATE.placementPhase && GAME_STATE.shootingPhase) {
+        displayTextMessage("Shoot on AI board.");
+        displayMessage(x + y);
+        GAME_STATE.currentBoard[board].board[xCord][yCord] = "m";
+        displayBoard(GAME_STATE.currentBoard[board]);
+      }
+      break;
+    default:
+      return null;
+  }
+if (GAME_STATE.shootingPhase && board === 1 && GAME_STATE.turn === "You") {
+  let hit = false;
+  for (const shipPosition of Object.values(shipPositions)) {
       if (shipPosition === shoot) {
         hit = true;
       }
@@ -87,15 +122,13 @@ export function handleClick(clickProperties) {
     if (hit) {
       GAME_STATE.currentBoard[board].board[x][y] = "X";
       displayTextMessage("hit Your turn again", "red");
+      displayBoard(GAME_STATE.currentBoard[1]);
     } else {
       GAME_STATE.currentBoard[board].board[x][y] = "m";
       displayTextMessage("missed, AI's turn", "red");
       GAME_STATE.turn = "AI";
-    }
-  }
-
-  displayBoard(GAME_STATE.currentBoard[0]);
-  displayBoard(GAME_STATE.currentBoard[1]);
+      displayBoard(GAME_STATE.currentBoard[1]);
+}
 }
 
 /**
@@ -136,6 +169,7 @@ and `board`, which should be a nested array to display.
 They require two arguments: first is a string to display,
 and the second is a color (can be text, RGB, RGBA, or hex color).
 */
+
 displayBoard({
   boardNumber: 1,
   board: [
@@ -155,7 +189,5 @@ displayBoard({
   ],
 });
 
-displayBoard(GAME_STATE.currentBoard[0]);
-displayBoard(GAME_STATE.currentBoard[1]);
 displayMessage("message", "green");
 displayTextMessage("text message", "red");
