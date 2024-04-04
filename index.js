@@ -121,7 +121,7 @@ if (GAME_STATE.shootingPhase && board === 1 && GAME_STATE.turn === "You") {
     }
     if (hit) {
       GAME_STATE.currentBoard[board].board[x][y] = "X";
-      displayTextMessage("hit Your turn again", "red");
+      displayTextMessage("hit, Your turn again", "red");
       displayBoard(GAME_STATE.currentBoard[1]);
     } else {
       GAME_STATE.currentBoard[board].board[x][y] = "m";
@@ -157,6 +157,26 @@ export function resetGame() {
 export function aiShoot(coordinates) {
   // You may delete the following line as an example to see what the data looks like.
   displayMessage(coordinates.x + coordinates.y);
+
+  const x = coordinates.x.codePointAt(0) - "A".codePointAt(0);
+  const y = coordinates.y - 1;
+  const board = 0;
+  const shoot = GAME_STATE.currentBoard[board].board[x][y];
+
+  if (GAME_STATE.shootingPhase && GAME_STATE.turn === "AI") {
+    if (shoot === "O") {
+      GAME_STATE.currentBoard[board].board[x][y] = "X";
+      displayTextMessage("hit AI's turn again", "red");
+    } else if (shoot === "") {
+      GAME_STATE.currentBoard[board].board[x][y] = "m";
+      displayTextMessage("missed, Your turn", "red");
+      GAME_STATE.turn = "You";
+    } else {
+      displayTextMessage("AI is an idot. It's your turn", "red");
+      GAME_STATE.turn = "You";
+    }
+  }
+  displayBoard(GAME_STATE.currentBoard[0]);
 }
 
 /*
