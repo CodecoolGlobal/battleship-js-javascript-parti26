@@ -67,7 +67,7 @@ export function selectGame(gameDescription) {
  */
 export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
-  //Use destructing to access object properties, improve code readability
+  //Use destructuring assignment to access object properties, improve code readability
   const { x, y, source } = clickProperties;
 
   const xCord = x.codePointAt(0) - "A".codePointAt(0);
@@ -90,13 +90,16 @@ export function handleClick(clickProperties) {
           GAME_STATE.userShipPositions.push(x + y);
           displayMessage(x + source + y);
           GAME_STATE.numOfShips--;
-          console.log(GAME_STATE.numOfShips);
           displayTextMessage(
-            `You have ${GAME_STATE.numOfShips} ships to place.`
+            `You've left ${GAME_STATE.numOfShips} ships to place.`
           );
           //Put ship on the table
           GAME_STATE.currentBoard[board].board[xCord][yCord] = "O";
           displayBoard(GAME_STATE.currentBoard[board]);
+        }
+        if (GAME_STATE.numOfShips === 0) {
+          GAME_STATE.placementPhase = false;
+          GAME_STATE.shootingPhase = true;
         }
       }
       break;
