@@ -76,6 +76,7 @@ export function handleClick(clickProperties) {
   const xCord = x.codePointAt(0) - "A".codePointAt(0);
   const yCord = y - 1;
   const board = source - 1;
+  const shoot = `${x.toLowerCase()}${y}`;
 
   //source values: 1 (user grid), 2 (AI grid)
   switch (source) {
@@ -98,37 +99,33 @@ export function handleClick(clickProperties) {
         if (GAME_STATE.numOfShips === 0) {
           GAME_STATE.placementPhase = false;
           GAME_STATE.shootingPhase = true;
+          displayTextMessage("Shooting phase started. It's your turn.");
         }
       }
       break;
     case 2: //--> click source is form AI grid
-      if (!GAME_STATE.placementPhase && GAME_STATE.shootingPhase) {
-        displayTextMessage("Shoot on AI board.");
-        displayMessage(x + y);
-        GAME_STATE.currentBoard[board].board[xCord][yCord] = "m";
-        displayBoard(GAME_STATE.currentBoard[board]);
+    //debugger;
+      if (GAME_STATE.shootingPhase && GAME_STATE.turn === "You") {
+        let hit = false;
+        for (const shipPosition of Object.values(shipPositions)) {
+          if (shipPosition === shoot) {
+            hit = true;
+          }
+        }
+        if (hit) {
+          GAME_STATE.currentBoard[board].board[xCord][yCord] = "X";
+          displayTextMessage("hit, Your turn again", "red");
+          displayBoard(GAME_STATE.currentBoard[1]);
+        } else {
+          GAME_STATE.currentBoard[board].board[xCord][yCord] = "m";
+          displayTextMessage("missed, AI's turn", "red");
+          GAME_STATE.turn = "AI";
+          displayBoard(GAME_STATE.currentBoard[1]);
+        }
       }
       break;
     default:
       return null;
-  }
-  if (GAME_STATE.shootingPhase && board === 1 && GAME_STATE.turn === "You") {
-    let hit = false;
-    for (const shipPosition of Object.values(shipPositions)) {
-      if (shipPosition === shoot) {
-        hit = true;
-      }
-    }
-    if (hit) {
-      GAME_STATE.currentBoard[board].board[x][y] = "X";
-      displayTextMessage("hit, Your turn again", "red");
-      displayBoard(GAME_STATE.currentBoard[1]);
-    } else {
-      GAME_STATE.currentBoard[board].board[x][y] = "m";
-      displayTextMessage("missed, AI's turn", "red");
-      GAME_STATE.turn = "AI";
-      displayBoard(GAME_STATE.currentBoard[1]);
-    }
   }
 }
 
