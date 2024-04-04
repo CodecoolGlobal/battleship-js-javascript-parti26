@@ -50,7 +50,7 @@ export function selectGame(gameDescription) {
 
   // debugger;
   const parts = gameDescription.replace(/{|}/g, "").split(/,s:|,/);
-  const boardSize = Number(parts.shift().charAt(5));
+  GAME_STATE.boardSize = Number(parts.shift().charAt(5));
   parts.forEach((part) => {
     let [key, value] = part.split(":");
     key = key.trim();
@@ -72,11 +72,11 @@ export function handleClick(clickProperties) {
   // You may delete the following line as an example to see what the data looks like.
   //Use destructuring assignment to access object properties, improve code readability
   const { x, y, source } = clickProperties;
-  
+
   const xCord = x.codePointAt(0) - "A".codePointAt(0);
   const yCord = y - 1;
   const board = source - 1;
-  
+
   //source values: 1 (user grid), 2 (AI grid)
   switch (source) {
     case 1: //--> click source is form USER grid
@@ -112,9 +112,9 @@ export function handleClick(clickProperties) {
     default:
       return null;
   }
-if (GAME_STATE.shootingPhase && board === 1 && GAME_STATE.turn === "You") {
-  let hit = false;
-  for (const shipPosition of Object.values(shipPositions)) {
+  if (GAME_STATE.shootingPhase && board === 1 && GAME_STATE.turn === "You") {
+    let hit = false;
+    for (const shipPosition of Object.values(shipPositions)) {
       if (shipPosition === shoot) {
         hit = true;
       }
@@ -128,7 +128,8 @@ if (GAME_STATE.shootingPhase && board === 1 && GAME_STATE.turn === "You") {
       displayTextMessage("missed, AI's turn", "red");
       GAME_STATE.turn = "AI";
       displayBoard(GAME_STATE.currentBoard[1]);
-}
+    }
+  }
 }
 
 /**
