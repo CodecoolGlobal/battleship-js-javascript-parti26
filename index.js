@@ -6,7 +6,7 @@ import {
 } from "./event-handlers.js";
 
 let GAME_STATE = {
-  boardSize: 0,
+  boardSize: 4,
   currentBoard: [
     {
       boardNumber: 1,
@@ -16,6 +16,15 @@ let GAME_STATE = {
         ["", "", "", ""],
         ["", "", "", ""],
       ],
+      count: function count(letter) {
+        let numberOfLetter = 0;
+        for (const e of this.board.flat()) {
+          if (e === letter) {
+            numberOfLetter += 1;
+          }
+        }
+        return numberOfLetter;
+      },
     },
     {
       boardNumber: 2,
@@ -25,16 +34,25 @@ let GAME_STATE = {
         ["", "", "", ""],
         ["", "", "", ""],
       ],
+      count: function count(letter) {
+        let numberOfLetter = 0;
+        for (const e of this.board.flat()) {
+          if (e === letter) {
+            numberOfLetter += 1;
+          }
+        }
+        return numberOfLetter;
+      },
     },
   ],
   userShipPositions: [],
+  AIshipPositions: {},
   numOfShips: 2, //---> for now it is burnt in, depends on game mode (AI ships number)
+  numOfShipsConst: 2,
   shootingPhase: false,
-  placementPhase: false,
-  turn: "You",
+  placementPhase: true,
+  turn: "user",
 };
-
-const shipPositions = {};
 
 /**
  * This function is called when you choose the game mode.
@@ -55,11 +73,11 @@ export function selectGame(gameDescription) {
     let [key, value] = part.split(":");
     key = key.trim();
     value = value.trim();
-    shipPositions[key] = value;
+    GAME_STATE.AIshipPositions[key] = value;
   });
 
   console.log(`Size of the board: ${GAME_STATE.boardSize}`);
-  console.table(shipPositions);
+  console.table(GAME_STATE.AIshipPositions);
 }
 
 /**
@@ -104,22 +122,26 @@ export function handleClick(clickProperties) {
       }
       break;
     case 2: //--> click source is form AI grid
-    //debugger;
-      if (GAME_STATE.shootingPhase && GAME_STATE.turn === "You") {
+      if (GAME_STATE.shootingPhase && GAME_STATE.turn === "user") {
         let hit = false;
-        for (const shipPosition of Object.values(shipPositions)) {
+        for (const shipPosition of Object.values(GAME_STATE.AIshipPositions)) {
           if (shipPosition === shoot) {
             hit = true;
           }
         }
         if (hit) {
           GAME_STATE.currentBoard[board].board[xCord][yCord] = "X";
-          displayTextMessage("hit, Your turn again", "red");
-          displayBoard(GAME_STATE.currentBoard[1]);
+          displayBoard(GAME_STATE.currentBoard[board]);
+          if (GAME_STATE.numOfShipsConst === GAME_STATE.currentBoard[board].count("X")) {
+            displayTextMessage("hit, You won. CONGRATULATION", "red");
+            GAME_STATE.shootingPhase = false;
+          } else {
+            displayTextMessage("hit, Your turn again", "red");
+          }
         } else {
           GAME_STATE.currentBoard[board].board[xCord][yCord] = "m";
           displayTextMessage("missed, AI's turn", "red");
-          GAME_STATE.turn = "AI";
+          GAME_STATE.turn = "ai";
           displayBoard(GAME_STATE.currentBoard[1]);
         }
       }
@@ -133,16 +155,37 @@ export function handleClick(clickProperties) {
  * Called when the player clicks on the reset game button.
  */
 export function resetGame() {
-  // You can delete the whole body of this function as an example.
-  const board = [];
-  for (let i = 0; i < 10; i++) {
-    board.push([]);
-    for (let j = 0; j < 10; j++) {
-      board[i].push("");
-    }
-  }
-  displayBoard({ boardNumber: 1, board: board });
-  displayBoard({ boardNumber: 2, board: board });
+  GAME_STATE = {
+    boardSize: 4,
+    currentBoard: [
+      {
+        boardNumber: 1,
+        board: [
+          ["", "", "", ""],
+          ["", "", "", ""],
+          ["", "", "", ""],
+          ["", "", "", ""],
+        ],
+      },
+      {
+        boardNumber: 2,
+        board: [
+          ["", "", "", ""],
+          ["", "", "", ""],
+          ["", "", "", ""],
+          ["", "", "", ""],
+        ],
+      },
+    ],
+    userShipPositions: [],
+    numOfShips: 2, //---> for now it is burnt in, depends on game mode (AI ships number)
+    shootingPhase: false,
+    placementPhase: true,
+    turn: "You",
+  };
+  displayBoard(GAME_STATE.currentBoard[0]);
+  displayBoard(GAME_STATE.currentBoard[1]);
+  displayTextMessage("Select new game mode")
 }
 
 /**
@@ -161,17 +204,22 @@ export function aiShoot(coordinates) {
   const board = 0;
   const shoot = GAME_STATE.currentBoard[board].board[x][y];
 
-  if (GAME_STATE.shootingPhase && GAME_STATE.turn === "AI") {
+  if (GAME_STATE.shootingPhase && GAME_STATE.turn === "ai") {
     if (shoot === "O") {
       GAME_STATE.currentBoard[board].board[x][y] = "X";
+      if (GAME_STATE.currentBoard[0].count("X") === GAME_STATE.numOfShipsConst) {
+        displayTextMessage("You lost, try again!", "red");
+        GAME_STATE.shootingPhase = false;
+      } else {
       displayTextMessage("hit AI's turn again", "red");
+      }
     } else if (shoot === "") {
       GAME_STATE.currentBoard[board].board[x][y] = "m";
       displayTextMessage("missed, Your turn", "red");
-      GAME_STATE.turn = "You";
+      GAME_STATE.turn = "user";
     } else {
-      displayTextMessage("AI is an idot. It's your turn", "red");
-      GAME_STATE.turn = "You";
+      displayTextMessage("AI is an idiot, shot at the same spot. It's your turn", "red");
+      GAME_STATE.turn = "user";
     }
   }
   displayBoard(GAME_STATE.currentBoard[0]);
