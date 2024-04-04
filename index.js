@@ -6,7 +6,7 @@ import {
 } from "./event-handlers.js";
 
 let GAME_STATE = {
-  boardSize: 0,
+  boardSize: 4,
   currentBoard: [
     {
       boardNumber: 1,
@@ -154,16 +154,37 @@ export function handleClick(clickProperties) {
  * Called when the player clicks on the reset game button.
  */
 export function resetGame() {
-  // You can delete the whole body of this function as an example.
-  const board = [];
-  for (let i = 0; i < 10; i++) {
-    board.push([]);
-    for (let j = 0; j < 10; j++) {
-      board[i].push("");
-    }
-  }
-  displayBoard({ boardNumber: 1, board: board });
-  displayBoard({ boardNumber: 2, board: board });
+  GAME_STATE = {
+    boardSize: 4,
+    currentBoard: [
+      {
+        boardNumber: 1,
+        board: [
+          ["", "", "", ""],
+          ["", "", "", ""],
+          ["", "", "", ""],
+          ["", "", "", ""],
+        ],
+      },
+      {
+        boardNumber: 2,
+        board: [
+          ["", "", "", ""],
+          ["", "", "", ""],
+          ["", "", "", ""],
+          ["", "", "", ""],
+        ],
+      },
+    ],
+    userShipPositions: [],
+    numOfShips: 2, //---> for now it is burnt in, depends on game mode (AI ships number)
+    shootingPhase: false,
+    placementPhase: true,
+    turn: "You",
+  };
+  displayBoard(GAME_STATE.currentBoard[0]);
+  displayBoard(GAME_STATE.currentBoard[1]);
+  displayTextMessage("Select new game mode")
 }
 
 /**
